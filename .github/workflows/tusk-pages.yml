@@ -2,6 +2,8 @@ name: Publish Tusk content to GitHub Pages
 
 on:
   workflow_dispatch:
+  repository_dispatch:
+    types: [tusk_publish]
   schedule:
     - cron: '*/15 * * * *'
 
