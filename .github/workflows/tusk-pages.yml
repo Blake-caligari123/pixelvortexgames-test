@@ -1,0 +1,58 @@
+name: Publish Tusk content to GitHub Pages
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '*/15 * * * *'
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    if: ${{ secrets.TUSK_TOKEN != '' }}
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Check out site
+        uses: actions/checkout@v6
+
+      - name: Prepare deploy folder
+        run: |
+          mkdir site
+          rsync -a --exclude='.git' --exclude='.github' ./ site/
+
+      - name: Download Tusk build scripts
+        run: |
+          curl -fsSLo tusk-pull.mjs https://tuskcms.com/sdk/tusk-pull.mjs
+          curl -fsSLo tusk-apply.mjs https://tuskcms.com/sdk/tusk-apply.mjs
+
+      - name: Apply published Tusk content
+        env:
+          TUSK_SITE: pixelvortexgames
+          TUSK_URL: https://tuskcms.com
+          TUSK_TOKEN: ${{ secrets.TUSK_TOKEN }}
+        run: |
+          node tusk-pull.mjs
+          node tusk-apply.mjs site
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload site artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
