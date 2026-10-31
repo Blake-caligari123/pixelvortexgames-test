@@ -1,6 +1,6 @@
 # Launch playbook: The Screen-Free Family Reset
 
-**Product:** a 30-page printable kit ($24) plus a Winter Break add-on ($33 bundle). Instant PDF download, sold through Facebook and Instagram ads.
+**Products:** a 30-page printable kit ($24), kit + Winter Break Pack ($33), and the **Complete Family Bundle ($47)**: kit + Teen & Tween Edition + Winter + Summer packs. Instant PDF downloads, sold through Facebook and Instagram ads.
 **Files:** `products/dist/*.pdf` (the paid products) · `site/` (sales page) · `ads/*.png` (ad images)
 
 ---
@@ -12,8 +12,9 @@
 2. **Lemon Squeezy** (lemonsqueezy.com). Create a free account, a store and two products:
    - "The Screen-Free Family Reset", $24: upload `screen-free-family-reset.pdf`
    - "Family Reset + Winter Break Pack", $33: upload both PDFs
-   - For each product: Settings → Confirmation → redirect to `https://YOURSITE/thanks.html?v=24` (or `?v=33`)
-   - Copy both checkout links and send them to me, or paste them into `CONFIG.checkout` in `site/index.html`
+   - "Complete Family Bundle", $47: upload all 4 PDFs (kit, teen, winter, summer)
+   - For each product: Settings → Confirmation → redirect to `https://YOURSITE/thanks.html?v=24` (`?v=33` or `?v=47`)
+   - Copy all three checkout links and send them to me, or paste them into `CONFIG.checkout` in `site/index.html`
    - Lemon Squeezy handles payment, instant download, receipts and sales tax. Its fee is 5% + 50¢.
 3. **Host the sales page** (free). Either option works:
    - **Netlify Drop:** drag the `site/` folder onto app.netlify.com/drop. That's the easiest, and it works with a private repo.
@@ -69,16 +70,18 @@ Upload the 4 images in `ads/` (1080×1080, plus a 1080×1350 portrait). Each get
 
 ## 5. Profit model
 
-We keep about **$26 per order** after fees, assuming about a third of buyers choose the $33 bundle.
+Assumed order mix: 45% kit ($24), 25% kit + winter ($33), 30% complete bundle ($47). That's an average order of about $33.
+After Lemon Squeezy fees we keep **about $31 per order**.
 
 | Visitors who buy | Cost per sale at ~$1/click | Profit per sale |
 |---|---|---|
-| 1.5% | ~$65 | −$39 (stop) |
-| 3% | ~$33 | −$7 (improve) |
-| 4.5% | ~$22 | **+$4** |
-| 6% | ~$17 | **+$9** |
+| 1.5% | ~$65 | −$34 (stop) |
+| 3% | ~$33 | −$2 (improve) |
+| 4.5% | ~$22 | **+$9** |
+| 6% | ~$17 | **+$14** |
 
-At $20/day in the good case: about 27 sales and **$100–250 profit a month**. Scaling to $100/day could mean **$800–1,500 a month**, but costs usually rise as you scale.
+**Path to $1,000/month profit:** about 70–110 sales a month at +$9 to +$14 each, roughly $50–80/day in ads, **plus** free sales from Etsy and Pinterest.
+Check the real order mix after the first 20 sales. If bundle uptake is low, I'll rework the offer section.
 **Maximum test risk: $150.**
 
 ## 6. Refunds and support
