@@ -1,74 +1,184 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pixel Vortex Games — Tusk test</title>
-    <style>
-      :root { color-scheme: dark; font-family: Inter, ui-sans-serif, system-ui, sans-serif; }
-      * { box-sizing: border-box; }
-      body { margin: 0; min-height: 100vh; color: #f6f2ff; background: #110d22; }
-      main { width: min(980px, calc(100% - 40px)); margin: 0 auto; padding: 84px 0 64px; }
-      .eyebrow { margin: 0 0 16px; color: #b7a2ff; font-size: .75rem; font-weight: 800; letter-spacing: .15em; text-transform: uppercase; }
-      h1 { max-width: 13ch; margin: 0; font-size: clamp(3rem, 9vw, 6.5rem); line-height: .93; letter-spacing: -.07em; }
-      .intro { max-width: 55ch; margin: 28px 0 40px; color: #d0c8e3; font-size: 1.15rem; line-height: 1.65; }
-      .hero { display: grid; grid-template-columns: 1.2fr .8fr; gap: 24px; align-items: stretch; }
-      .hero img { width: 100%; height: 350px; display: block; border-radius: 20px; object-fit: cover; background: #2b2250; }
-      .panel { padding: 28px; border: 1px solid #3b2e68; border-radius: 20px; background: #1b1533; }
-      h2 { margin: 0 0 12px; font-size: 1.35rem; }
-      .panel p { margin: 0; color: #c8bfdd; line-height: 1.55; }
-      .download, button { display: inline-block; margin-top: 20px; padding: 11px 15px; border: 0; border-radius: 9px; color: #160d2b; background: #8cf5d1; font: inherit; font-weight: 800; text-decoration: none; cursor: pointer; }
-      .games { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 56px 0; padding: 0; list-style: none; }
-      .games li { padding: 20px; border: 1px solid #3b2e68; border-radius: 14px; background: #19132f; }
-      .games h3 { margin: 0 0 8px; color: #8cf5d1; }
-      .games p { margin: 0; color: #c8bfdd; line-height: 1.5; }
-      footer { padding-top: 28px; border-top: 1px solid #3b2e68; color: #9c91b5; font-size: .9rem; }
-      .status { min-height: 1.5em; margin: 14px 0 0; color: #b7a2ff; font-size: .9rem; }
-      @media (max-width: 700px) { .hero, .games { grid-template-columns: 1fr; } .hero img { height: 250px; } }
-    </style>
-  </head>
-  <body>
-    <main>
-      <p class="eyebrow">Independent game studio</p>
-      <h1 data-tusk="home.headline">Small worlds. Huge strange.</h1>
-      <p class="intro" data-tusk="home.intro">Pixel Vortex Games makes colourful, curious games for people who still stop to explore the corners of a map.</p>
-      <section class="hero" aria-label="Studio introduction">
-        <img data-tusk="home.hero" src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&amp;fit=crop&amp;w=1200&amp;q=85" alt="A retro arcade cabinet glowing in a dark room">
-        <div class="panel">
-          <h2 data-tusk="home.release_heading" data-tusk-label="Release heading">The demo is here</h2>
-          <p data-tusk="home.release_intro">Download the first playable build of Nebula Nibbler and tell us which creature ate you first.</p>
-          <a class="download" data-tusk="home.demo_download" href="/downloads/nebula-nibbler-demo.zip">Download demo</a>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Patchwell — accessibility fixes, not widgets</title>
+  <meta name="description" content="Accessibility audits for small online stores, with ready-to-paste code fixes. WCAG 2.2 AA. Flat price, delivered in 3 business days.">
+  <style>
+    :root {
+      --bg: #fbfaf7; --surface: #ffffff; --fg: #1b2230; --muted: #566074; --line: #e4e2dc;
+      --accent: #1849a9; --accent-fg: #ffffff; --chip: #eef2fb;
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+    @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+      --bg: #0f131b; --surface: #161b26; --fg: #e9ecf3; --muted: #a2abbd; --line: #262d3b;
+      --accent: #8fb3ff; --accent-fg: #0b1220; --chip: #1c2433; } }
+    :root[data-theme="dark"] { --bg: #0f131b; --surface: #161b26; --fg: #e9ecf3; --muted: #a2abbd; --line: #262d3b; --accent: #8fb3ff; --accent-fg: #0b1220; --chip: #1c2433; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--fg); line-height: 1.6; }
+    a { color: var(--accent); }
+    :focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+    .skip { position: absolute; left: -999px; } .skip:focus { left: 12px; top: 12px; background: var(--surface); padding: 8px 12px; z-index: 9; }
+    .wrap { width: min(1040px, calc(100% - 32px)); margin: 0 auto; }
+    header { display: flex; justify-content: space-between; align-items: center; padding: 18px 0; }
+    .logo { font-weight: 800; font-size: 1.2rem; letter-spacing: -.02em; color: var(--fg); text-decoration: none; display: flex; gap: 8px; align-items: center; }
+    nav a { color: var(--muted); margin-left: 18px; text-decoration: none; } nav a:hover { color: var(--fg); text-decoration: underline; }
+    .hero { padding: 48px 0 56px; display: grid; grid-template-columns: 1.15fr .85fr; gap: 40px; align-items: center; }
+    h1 { font-size: clamp(2.3rem, 5.5vw, 3.8rem); line-height: 1.03; letter-spacing: -.04em; margin: 0 0 18px; }
+    .lede { font-size: 1.15rem; color: var(--muted); max-width: 52ch; margin: 0 0 24px; }
+    .btn { display: inline-block; padding: 12px 18px; border-radius: 10px; font: inherit; font-weight: 700; text-decoration: none; border: 2px solid var(--accent); cursor: pointer; }
+    .btn.primary { background: var(--accent); color: var(--accent-fg); } .btn.ghost { color: var(--accent); background: transparent; }
+    .hero .btn.ghost { margin-left: 8px; }
+    .compare { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 22px; }
+    .compare h2 { font-size: 1rem; margin: 0 0 12px; }
+    .compare table { width: 100%; border-collapse: collapse; font-size: .93rem; }
+    .compare td, .compare th { padding: 8px 6px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+    .compare tr:last-child td { border-bottom: 0; font-weight: 700; }
+    section.block { padding: 56px 0; border-top: 1px solid var(--line); }
+    section.block > h2 { font-size: clamp(1.6rem, 3.4vw, 2.2rem); letter-spacing: -.03em; margin: 0 0 8px; }
+    .sub { color: var(--muted); max-width: 62ch; margin: 0 0 28px; }
+    .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 20px; }
+    .card h3 { margin: 0 0 6px; font-size: 1.08rem; }
+    .card p { margin: 0; color: var(--muted); }
+    .stat b { display: block; font-size: 2rem; letter-spacing: -.03em; }
+    .stat span { color: var(--muted); font-size: .92rem; }
+    .stat small { display: block; margin-top: 6px; font-size: .75rem; color: var(--muted); }
+    .price { font-size: 2.1rem; font-weight: 800; letter-spacing: -.03em; margin: 8px 0 4px; }
+    .tier { display: flex; flex-direction: column; }
+    .tier ul { padding-left: 18px; color: var(--muted); margin: 10px 0 18px; flex: 1; }
+    .tier .btn { text-align: center; }
+    .tier.feature { border: 2px solid var(--accent); }
+    .tag { align-self: flex-start; font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--accent); background: var(--chip); border-radius: 999px; padding: 2px 10px; }
+    .bm { display: inline-block; padding: 12px 18px; border-radius: 10px; background: var(--chip); border: 2px dashed var(--accent); color: var(--accent); font-weight: 700; text-decoration: none; cursor: grab; }
+    ol.steps { padding-left: 20px; color: var(--muted); } ol.steps li { margin: 6px 0; }
+    details { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px 18px; margin: 10px 0; }
+    summary { font-weight: 700; cursor: pointer; } details p { color: var(--muted); margin: 10px 0 0; }
+    footer { padding: 28px 0 48px; border-top: 1px solid var(--line); color: var(--muted); font-size: .9rem; }
+    @media (max-width: 860px) { .hero, .grid3 { grid-template-columns: 1fr; } .grid4 { grid-template-columns: 1fr 1fr; } nav a:not(:last-child) { display: none; } .hero .btn.ghost { margin: 10px 0 0; } }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <div class="wrap">
+    <header>
+      <a class="logo" href="#main"><svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="6" fill="currentColor" opacity=".12"/><path d="M7 12.5l3.2 3.2L17 8.8" stroke="currentColor" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Patchwell</a>
+      <nav aria-label="Main"><a href="#how">How it works</a><a href="#free">Free check</a><a href="#pricing">Pricing</a></nav>
+    </header>
+  </div>
+
+  <main id="main" class="wrap">
+    <section class="hero">
+      <div>
+        <h1>Accessibility fixes, not widgets.</h1>
+        <p class="lede">We audit your online store against WCAG 2.2 AA and send back a plain-English report with <strong>code fixes you can paste in</strong>. Flat price, delivered in 3 business days, for less than a year of an overlay plugin.</p>
+        <a class="btn primary" href="#pricing">See pricing</a><a class="btn ghost" href="#free">Free 30-second check</a>
+      </div>
+      <div class="compare">
+        <h2 id="cmp">Your options, honestly</h2>
+        <table aria-labelledby="cmp">
+          <tr><th scope="col">Option</th><th scope="col">Typical cost</th><th scope="col">Fixes your code?</th></tr>
+          <tr><td>Overlay widget</td><td>$490–$3,990 / yr</td><td>No</td></tr>
+          <tr><td>$50 marketplace scan</td><td>$40–$50</td><td>Rarely</td></tr>
+          <tr><td>Agency manual audit</td><td>$1,500–$7,000</td><td>Report only</td></tr>
+          <tr><td>Patchwell Fix Report</td><td>$149 once</td><td>Yes, paste-ready</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <section class="block" aria-labelledby="why">
+      <h2 id="why">Why store owners are fixing this now</h2>
+      <p class="sub">About 1 in 4 US adults has a disability. Most stores turn some of them away without realising, and the legal pressure is growing.</p>
+      <div class="grid4">
+        <div class="card stat"><b>95.9%</b><span>of home pages fail basic WCAG checks</span><small>WebAIM Million, 2026</small></div>
+        <div class="card stat"><b>75</b><span>average errors per Shopify page, above the web average</span><small>WebAIM Million, 2026</small></div>
+        <div class="card stat"><b>~6,000</b><span>US digital accessibility lawsuits projected for 2026, mostly against online stores</span><small>UsableNet mid-year report</small></div>
+        <div class="card stat"><b>$1M</b><span>FTC penalty against the biggest overlay vendor for overstating what widgets do</span><small>FTC, 2025</small></div>
+      </div>
+    </section>
+
+    <section class="block" id="how" aria-labelledby="how-h">
+      <h2 id="how-h">How it works</h2>
+      <div class="grid3">
+        <div class="card"><h3>1. Send your store URL</h3><p>Pick up to 10 key pages: home, collection, product, cart, contact and so on. We don't need a login.</p></div>
+        <div class="card"><h3>2. We test it like real users do</h3><p>Automated WCAG 2.2 rules plus checks that scanners skip: keyboard-only navigation, visible focus, 400% zoom, screen-reader names and overlay detection.</p></div>
+        <div class="card"><h3>3. You get fixes, not just findings</h3><p>Every issue is ranked by urgency and explained in plain English, with a code snippet for your theme. A free re-check is included after you apply them.</p></div>
+      </div>
+    </section>
+
+    <section class="block" id="free" aria-labelledby="free-h">
+      <h2 id="free-h">Free check: see your store's issues in 30 seconds</h2>
+      <p class="sub">The check runs inside your own browser on whatever page you're viewing. Nothing is uploaded, and there's no sign-up.</p>
+      <p><a class="bm" id="bookmarklet" href="#">Patchwell check</a></p>
+      <ol class="steps">
+        <li>Drag the button above to your bookmarks bar. On mobile, use a desktop browser.</li>
+        <li>Open any page of your store.</li>
+        <li>Click the bookmark. A panel lists the issues on that page.</li>
+      </ol>
+      <p><button type="button" id="try" class="btn primary">Or try it on this page</button></p>
+    </section>
+
+    <section class="block" id="pricing" aria-labelledby="price-h">
+      <h2 id="price-h">Flat, upfront pricing</h2>
+      <p class="sub">No subscriptions you have to remember to cancel, and no widget. You own every fix.</p>
+      <div class="grid3">
+        <div class="card tier">
+          <span class="tag">Starter</span><h3>Quick Audit</h3>
+          <div class="price">$79</div>
+          <ul><li>Up to 3 pages</li><li>Ranked issue report</li><li>Plain-English explanations</li><li>Delivered in 2 business days</li></ul>
+          <a class="btn ghost order" data-plan="quick" href="#">Order Quick Audit</a>
         </div>
-      </section>
-      <ul class="games" data-tusk-list="home.games" aria-label="Games in development">
-        <li data-tusk-item><h3 data-tusk-field="name">Nebula Nibbler</h3><p data-tusk-field="description">A cosmic snack hunt with too many teeth.</p></li>
-        <li data-tusk-item><h3 data-tusk-field="name">Moss &amp; Meteor</h3><p data-tusk-field="description">Grow a tiny forest on a falling star.</p></li>
-        <li data-tusk-item><h3 data-tusk-field="name">Loop Lagoon</h3><p data-tusk-field="description">Catch impossible fish in a time loop.</p></li>
-      </ul>
-      <section class="panel" aria-label="Webhook test">
-        <h2>Webhook relay test</h2>
-        <p>Use this only to confirm that a request reaches your Webhook Relay bin. Tusk should ultimately call a deploy hook configured in its Going live settings.</p>
-        <button id="webhook-test" type="button">Send test request</button>
-        <p id="status" class="status" role="status"></p>
-      </section>
-      <footer data-tusk="globals.footer_line">© 2026 Pixel Vortex Games. Made with cheerful chaos.</footer>
-    </main>
-    <script>
-      const webhookUrl = 'https://bin.webhookrelay.com/v1/webhooks/bbafd308-8a31-41e7-8919-ce6298cc2ee4';
-      const testButton = document.querySelector('#webhook-test');
-      const status = document.querySelector('#status');
-      testButton.addEventListener('click', async () => {
-        testButton.disabled = true;
-        status.textContent = 'Sending test request…';
-        try {
-          await fetch(webhookUrl, { method: 'GET', mode: 'no-cors' });
-          status.textContent = 'Request sent. Check the Webhook Relay bin.';
-        } catch (error) {
-          status.textContent = 'The request could not be sent from this browser.';
-        } finally {
-          testButton.disabled = false;
-        }
-      });
-    </script>
-  </body>
+        <div class="card tier feature">
+          <span class="tag">Most popular</span><h3>Fix Report</h3>
+          <div class="price">$149</div>
+          <ul><li>Up to 10 pages</li><li>Paste-ready code fixes for your theme</li><li>Keyboard, focus, zoom and screen-reader review</li><li>Free re-check after you fix</li><li>Delivered in 3 business days</li></ul>
+          <a class="btn primary order" data-plan="fix" href="#">Order Fix Report</a>
+        </div>
+        <div class="card tier">
+          <span class="tag">Hands-off</span><h3>Done For You</h3>
+          <div class="price">$399</div>
+          <ul><li>Everything in Fix Report</li><li>We apply the fixes to a copy of your theme</li><li>You review and publish</li><li>Before and after report</li></ul>
+          <a class="btn ghost order" data-plan="dfy" href="#">Order Done For You</a>
+        </div>
+      </div>
+      <p class="sub" style="margin-top:18px">Add <strong>Monthly Re-check for $19/month</strong> to get each month's new issues (from theme updates, new apps or new products) emailed with fixes.</p>
+    </section>
+
+    <section class="block" aria-labelledby="faq-h">
+      <h2 id="faq-h">Questions</h2>
+      <details><summary>Will this make my store "ADA compliant" or stop lawsuits?</summary><p>No honest provider can promise that, and anyone who does is overselling. What we do is find and help you fix the real barriers on your pages. That's the meaningful, good-faith work that both disabled customers and courts look for. This is technical help, not legal advice. If you've already received a demand letter, talk to a lawyer first, then send us their list.</p></details>
+      <details><summary>How is this different from an accessibility widget?</summary><p>Widgets add a toolbar on top of your site but leave the broken code underneath. In 2025 the US FTC fined the largest widget vendor $1M for claiming otherwise. We fix the code itself, and you pay once.</p></details>
+      <details><summary>Which platforms do you support?</summary><p>Shopify is our specialty. We also handle WooCommerce, Squarespace, Wix and custom sites. On hosted builders, some fixes are settings changes instead of code, and we'll tell you exactly where to click.</p></details>
+      <details><summary>Who does the work?</summary><p>Patchwell uses automated testing and AI-assisted review to find issues and write fixes, and every report is checked before delivery. That's how we keep the price at a fraction of an agency's.</p></details>
+      <details><summary>What if I'm not happy?</summary><p>If the report doesn't give you at least five concrete fixes you can act on, we'll refund you in full.</p></details>
+    </section>
+  </main>
+
+  <div class="wrap"><footer>© 2026 Patchwell. Technical accessibility audits for small online businesses. Not a law firm, and nothing here is legal advice. <span id="contact"></span></footer></div>
+
+  <script>
+    // ==== Fill these in once accounts exist (see ops/SETUP.md) ====
+    const CONFIG = {
+      contactEmail: '',                              // e.g. hello@yourdomain.com
+      paymentLinks: { quick: '', fix: '', dfy: '' }  // Stripe Payment Links
+    };
+    // ===============================================================
+    const origin = location.protocol.startsWith('http') ? location.origin + location.pathname.replace(/[^/]*$/, '') : 'https://patchwell.example/';
+    const site = origin.replace(/\/$/, '');
+    const bm = "javascript:(function(){var s=document.createElement('script');s.src='" + origin + "checker.js?'+Date.now();s.dataset.site='" + site + "';document.body.appendChild(s);})();";
+    const bmEl = document.getElementById('bookmarklet');
+    bmEl.setAttribute('href', bm);
+    bmEl.addEventListener('click', (e) => { e.preventDefault(); alert('Drag this button to your bookmarks bar, then click it while viewing your store.'); });
+    document.getElementById('try').addEventListener('click', () => { const s = document.createElement('script'); s.src = 'checker.js?' + Date.now(); s.dataset.site = site; document.body.appendChild(s); });
+    document.querySelectorAll('.order').forEach((a) => {
+      const link = CONFIG.paymentLinks[a.dataset.plan];
+      if (link) a.href = link;
+      else if (CONFIG.contactEmail) a.href = 'mailto:' + CONFIG.contactEmail + '?subject=' + encodeURIComponent(a.textContent) + '&body=' + encodeURIComponent('Store URL:\nPages to check (up to 10):\nPlatform/theme:\n');
+      else { a.textContent = 'Opening soon'; a.removeAttribute('href'); a.setAttribute('aria-disabled', 'true'); a.style.opacity = '.6'; }
+    });
+    if (CONFIG.contactEmail) { const c = document.getElementById('contact'); const l = document.createElement('a'); l.href = 'mailto:' + CONFIG.contactEmail; l.textContent = CONFIG.contactEmail; c.append('Contact: ', l); }
+  </script>
+</body>
 </html>

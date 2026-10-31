@@ -1,0 +1,155 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Accessibility report: Demo Store (sample)</title>
+<style>
+:root{--bg:#fff;--fg:#1d2433;--muted:#5b6478;--line:#e3e6ee;--crit:#b42318;--ser:#c4320a;--mod:#a15c07;--min:#475467;--acc:#1849a9}
+@media (prefers-color-scheme:dark){:root{--bg:#10141d;--fg:#e8ebf2;--muted:#9aa3b5;--line:#283043;--crit:#ff8a80;--ser:#ffb37a;--mod:#f5c86a;--min:#b7c0d1;--acc:#8fb3ff}}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.55 system-ui,sans-serif}main{max-width:900px;margin:0 auto;padding:32px 16px 64px}
+h1{font-size:2rem;margin:0 0 4px}a{color:var(--acc)}.muted,.meta{color:var(--muted)}.meta{font-size:.9rem;margin:-4px 0 8px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:24px 0}.card{border:1px solid var(--line);border-radius:10px;padding:14px}.card b{display:block;font-size:1.7rem}
+.rule{border:1px solid var(--line);border-left:5px solid var(--min);border-radius:10px;padding:14px 18px;margin:14px 0}.rule h3{margin:0 0 6px;font-size:1.1rem}
+.critical{border-left-color:var(--crit)}.serious{border-left-color:var(--ser)}.moderate{border-left-color:var(--mod)}
+.badge{font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;border:1px solid currentColor;border-radius:999px;padding:1px 8px;vertical-align:middle}
+.critical .badge{color:var(--crit)}.serious .badge{color:var(--ser)}.moderate .badge{color:var(--mod)}.minor .badge{color:var(--min)}
+pre{background:rgba(127,127,127,.12);padding:12px;border-radius:8px;overflow:auto;font-size:.85rem}code{font-size:.88em;word-break:break-word}.snip{font-family:ui-monospace,monospace;font-size:.8rem;color:var(--muted);word-break:break-all}
+ul.ex{padding-left:18px}ul.ex li{margin:6px 0}table{border-collapse:collapse;width:100%;font-size:.9rem}td,th{border-bottom:1px solid var(--line);padding:6px;text-align:left;vertical-align:top}
+.note{border:1px solid var(--line);border-radius:10px;padding:12px 16px;color:var(--muted);font-size:.9rem}
+</style></head><body><main>
+<p class="muted">Accessibility audit · WCAG 2.2 Level AA · 2026-10-31</p>
+<h1>Demo Store (sample)</h1>
+<div class="cards">
+<div class="card"><b>2</b>critical issue types</div><div class="card"><b>6</b>serious</div>
+<div class="card"><b>6</b>moderate</div><div class="card"><b>0</b>minor</div><div class="card"><b>23</b>total instances</div></div>
+<h2>Pages reviewed</h2><table><tr><th>Page</th><th>Issue types</th><th>Keyboard stops</th><th>320px reflow</th></tr>
+<tr><td><a href="http://localhost:8767/bad.html">Bad shop</a></td><td>10</td><td>6</td><td>fails</td></tr>
+</table>
+<h2>Issues, most urgent first</h2>
+<section class="rule critical">
+  <h3><span class="badge">critical</span> 1. Buttons with no readable name</h3>
+  <p class="meta">1 instance(s) on 1 of 1 page(s) · <a href="https://dequeuniversity.com/rules/axe/4.14/button-name?application=axeAPI">rule reference</a> · WCAG 4.1.2</p>
+  <p><strong>Who this affects:</strong> Screen reader users hear &quot;button&quot; with no idea what it does (menu toggles, close icons, quantity +/−).</p>
+  <details open><summary>Where we found it</summary><ul class="ex"><li><code>button</code><br><span class="snip">&lt;button&gt;&lt;svg width=&quot;10&quot; height=&quot;10&quot;&gt;&lt;/svg&gt;&lt;/button&gt;</span><br><small>http://localhost:8767/bad.html</small></li></ul></details>
+  <p><strong>How to fix:</strong> Give icon-only buttons an <code>aria-label</code> and hide the decorative icon.</p>
+  <pre><code>&lt;button type=&quot;button&quot; aria-label=&quot;Open menu&quot; aria-expanded=&quot;false&quot;&gt;
+  &lt;svg aria-hidden=&quot;true&quot; focusable=&quot;false&quot;&gt;…&lt;/svg&gt;
+&lt;/button&gt;</code></pre>
+</section>
+<section class="rule critical">
+  <h3><span class="badge">critical</span> 2. Images have no text alternative</h3>
+  <p class="meta">1 instance(s) on 1 of 1 page(s) · <a href="https://dequeuniversity.com/rules/axe/4.14/image-alt?application=axeAPI">rule reference</a> · WCAG 1.1.1</p>
+  <p><strong>Who this affects:</strong> Blind customers using screen readers hear &quot;image&quot; or a file name instead of what the product looks like.</p>
+  <details open><summary>Where we found it</summary><ul class="ex"><li><code>img[src=&quot;x.jpg&quot;]</code><br><span class="snip">&lt;img src=&quot;x.jpg&quot;&gt;</span><br><small>http://localhost:8767/bad.html</small></li></ul></details>
+  <p><strong>How to fix:</strong> Give every meaningful image alt text that says what it shows ("Navy linen shirt, front view"). Give purely decorative images an empty <code>alt=""</code>. In Shopify, set this under Products → Media → "Add alt text".</p>
+  <pre><code>&lt;img src=&quot;shirt.jpg&quot; alt=&quot;Navy linen shirt, front view&quot;&gt;
+&lt;img src=&quot;divider.svg&quot; alt=&quot;&quot;&gt;  &lt;!-- decorative --&gt;</code></pre>
+</section>
+<section class="rule serious">
+  <h3><span class="badge">serious</span> 3. Keyboard focus is invisible</h3>
+  <p class="meta">5 instance(s) on 1 of 1 page(s) · WCAG 2.4.7</p>
+  <p><strong>Who this affects:</strong> Keyboard-only users (motor disabilities, power users) can't see where they are on the page.</p>
+  <details open><summary>Where we found it</summary><ul class="ex"><li><code>a</code><br><span class="snip"></span><br><small>http://localhost:8767/bad.html</small></li><li><code>button</code><br><span class="snip"></span><br><small>http://localhost:8767/bad.html</small></li><li><code>input</code><br><span class="snip"></span><br><small>http://localhost:8767/bad.html</small></li></ul></details>
+  <p><strong>How to fix:</strong> Don't remove focus outlines. Add a clear <code>:focus-visible</code> style site-wide.</p>
+  <pre><code>:focus-visible { outline: 3px solid #1849a9; outline-offset: 2px; }
+/* remove any rule like  *:focus { outline: none; }  */</code></pre>
+</section>
+<section class="rule serious">
+  <h3><span class="badge">serious</span> 4. Text is too low-contrast to read</h3>
+  <p class="meta">1 instance(s) on 1 of 1 page(s) · <a href="https://dequeuniversity.com/rules/axe/4.14/color-contrast?application=axeAPI">rule reference</a> · WCAG 1.4.3</p>
+  <p><strong>Who this affects:</strong> People with low vision, older customers, and anyone using a phone in sunlight.</p>
+  <details open><summary>Where we found it</summary><ul class="ex"><li><code>p</code><br><span class="snip">&lt;p class=&quot;low&quot;&gt;Low contrast text on white&lt;/p&gt;</span><br><small>http://localhost:8767/bad.html</small></li></ul></details>
+  <p><strong>How to fix:</strong> Body text needs a contrast ratio of at least 4.5:1 against its background, and large text (24px, or 18.7px bold) needs 3:1. Darken the text or lighten the background. Light-grey text on white and white text on pastel buttons are the usual offenders.</p>
+  <pre><code>/* e.g. in your theme CSS */
+.price--compare, .caption, .footer a { color: #595959; } /* 7:1 on white */
+.button--primary { background: #1a5d38; color: #fff; }  /* 7.3:1 */</code></pre>
+</section>
+<section class="rule serious">
+  <h3><span class="badge">serious</span> 5. Page language is not declared</h3>
+  <p class="meta">1 instance(s) on 1 of 1 page(s) · <a href="https://dequeuniversity.com/rules/axe/4.14/html-has-lang?application=axeAPI">rule reference</a> · WCAG 3.1.1</p>
+  <p><strong>Who this affects:</strong> Screen readers may pronounce the whole page in the wrong accent or language.</p>
+  <details open><summary>Where we found it</summary><ul class="ex"><li><code>html</code><br><span class="snip">&lt;html data-uw-w-loader=&quot;&quot;&gt;</span><br><small>http://localhost:8767/bad.html</small></li></ul></details>
+  <p><strong>How to fix:</strong> Set the language on the <code>&lt;html&gt;</code> element (in Shopify: layout/theme.liquid).</p>
+  <pre><code>&lt;html lang=&quot;{{ request.locale.iso_code }}&quot;&gt;</code></pre>
+</section>
+<section class="rule serious">
+  <h3><span class="badge">serious</span> 6. Links with no readable name</h3>
+  <p class="meta">1 instance(s) on 1 of 1 page(s) · <a href="https://dequeuniversity.com/rules/axe/4.14/link-name?application=axeAPI">rule reference</a> · WCAG 2.4.4 / 4.1.2</p>
+  <p><strong>Who this affects:</strong> Screen reader users hear &quot;link&quot; with no idea where it goes. Icon-only social and cart links are the common cause.</p>
+  <details open><summary>Where we found it</summary><ul class="ex"><li><code>a[href$=&quot;cart&quot;]</code><br><span class="snip">&lt;a href=&quot;/cart&quot;&gt;&lt;svg width=&quot;20&quot; height=&quot;20&quot;&gt;&lt;/svg&gt;&lt;/a&gt;</span><br><small>http://localhost:8767/bad.html</small></li></ul></details>
+  <p><strong>How to fix:</strong> Add visible text or an <code>aria-label</code> to icon-only links.</p>
+  <pre><code>&lt;a href=&quot;/cart&quot; aria-label=&quot;Cart, 2 items&quot;&gt;
+  &lt;svg aria-hidden=&quot;true&quot; focusable=&quot;false&quot;&gt;…&lt;/svg&gt;
+&lt;/a&gt;</code></pre>
+</section>
+<section class="rule serious">
+  <h3><span class="badge">serious</span> 7. All touch targets must be 24px large, or leave sufficient space</h3>
+  <p class="meta">1 instance(s) on 1 of 1 page(s) · <a href="https://dequeuniversity.com/rules/axe/4.14/target-size?application=axeAPI">rule reference</a></p>
+  <p><strong>Who this affects:</strong> People using assistive technology.</p>
+  <details open><summary>Where we found it</summary><ul class="ex"><li><code>button</code><br><span class="snip">&lt;button&gt;&lt;svg width=&quot;10&quot; height=&quot;10&quot;&gt;&lt;/svg&gt;&lt;/button&gt;</span><br><small>http://localhost:8767/bad.html</small></li></ul></details>
+  <p><strong>How to fix:</strong> See the rule reference link above for remediation details. We include specific guidance for your theme in the manual review.</p>
+  
+</section>
+<section class="rule serious">
+  <h3><span class="badge">serious</span> 8. Page scrolls sideways when zoomed</h3>
+  <p class="meta">1 instance(s) on 1 of 1 page(s) · WCAG 1.4.10</p>
+  <p><strong>Who this affects:</strong> Low-vision customers who zoom to 400% have to scroll in two directions to read each line.</p>
+  <details open><summary>Where we found it</summary><ul class="ex"><li><code>document</code><br><span class="snip">page is 908px wide at a 320px viewport</span><br><small>http://localhost:8767/bad.html</small></li></ul></details>
+  <p><strong>How to fix:</strong> Find the element wider than the screen (often fixed-width tables, images or carousels) and make it fluid.</p>
+  <pre><code>img, video, table { max-width: 100%; height: auto; }
+.some-wide-thing { min-width: 0; overflow-wrap: anywhere; }</code></pre>
+</section>
+<section class="rule moderate">
+  <h3><span class="badge">moderate</span> 9. Content outside page landmarks</h3>
+  <p class="meta">6 instance(s) on 1 of 1 page(s) · <a href="https://dequeuniversity.com/rules/axe/4.14/region?application=axeAPI">rule reference</a> · WCAG 1.3.1 (best practice)</p>
+  <p><strong>Who this affects:</strong> Screen reader users jump between header, main and footer. Content outside them is easy to miss.</p>
+  <details open><summary>Where we found it</summary><ul class="ex"><li><code>img[src=&quot;x.jpg&quot;]</code><br><span class="snip">&lt;img src=&quot;x.jpg&quot;&gt;</span><br><small>http://localhost:8767/bad.html</small></li><li><code>h3</code><br><span class="snip">&lt;h3&gt;Products&lt;/h3&gt;</span><br><small>http://localhost:8767/bad.html</small></li><li><code>p</code><br><span class="snip">&lt;p class=&quot;low&quot;&gt;Low contrast text on white&lt;/p&gt;</span><br><small>http://localhost:8767/bad.html</small></li><li><code>input</code><br><span class="snip">&lt;input type=&quot;email&quot; placeholder=&quot;Email&quot; style=&quot;&quot;&gt;</span><br><small>http://localhost:8767/bad.html</small></li><li><code>a[href=&quot;/a&quot;]</code><br><span class="snip">&lt;a href=&quot;/a&quot;&gt;Shop&lt;/a&gt;</span><br><small>http://localhost:8767/bad.html</small></li><li><code>a[href=&quot;/b&quot;]</code><br><span class="snip">&lt;a href=&quot;/b&quot;&gt;About&lt;/a&gt;</span><br><small>http://localhost:8767/bad.html</small></li></ul></details>
+  <p><strong>How to fix:</strong> Wrap the page in <code>&lt;header&gt;</code>, <code>&lt;main id="MainContent"&gt;</code> and <code>&lt;footer&gt;</code>, including announcement bars and popups.</p>
+  <pre><code>&lt;header&gt;…&lt;/header&gt;
+&lt;main id=&quot;MainContent&quot;&gt;…&lt;/main&gt;
+&lt;footer&gt;…&lt;/footer&gt;</code></pre>
+</section>
+<section class="rule moderate">
+  <h3><span class="badge">moderate</span> 10. No &lt;main&gt; landmark</h3>
+  <p class="meta">1 instance(s) on 1 of 1 page(s) · <a href="https://dequeuniversity.com/rules/axe/4.14/landmark-one-main?application=axeAPI">rule reference</a> · WCAG 1.3.1 (best practice)</p>
+  <p><strong>Who this affects:</strong> Screen reader users cannot jump straight to the main content.</p>
+  <details open><summary>Where we found it</summary><ul class="ex"><li><code>html</code><br><span class="snip">&lt;html data-uw-w-loader=&quot;&quot;&gt;</span><br><small>http://localhost:8767/bad.html</small></li></ul></details>
+  <p><strong>How to fix:</strong> Wrap the primary content in a single <code>&lt;main&gt;</code>.</p>
+  <pre><code>&lt;main id=&quot;MainContent&quot; tabindex=&quot;-1&quot;&gt;…&lt;/main&gt;</code></pre>
+</section>
+<section class="rule moderate">
+  <h3><span class="badge">moderate</span> 11. Pinch-zoom is disabled</h3>
+  <p class="meta">1 instance(s) on 1 of 1 page(s) · <a href="https://dequeuniversity.com/rules/axe/4.14/meta-viewport?application=axeAPI">rule reference</a> · WCAG 1.4.4</p>
+  <p><strong>Who this affects:</strong> Low-vision customers on phones cannot zoom in to read.</p>
+  <details open><summary>Where we found it</summary><ul class="ex"><li><code>meta</code><br><span class="snip">&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, user-scalable=no&quot;&gt;</span><br><small>http://localhost:8767/bad.html</small></li></ul></details>
+  <p><strong>How to fix:</strong> Remove <code>maximum-scale</code> and <code>user-scalable=no</code> from the viewport tag.</p>
+  <pre><code>&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;</code></pre>
+</section>
+<section class="rule moderate">
+  <h3><span class="badge">moderate</span> 12. No main (h1) heading on the page</h3>
+  <p class="meta">1 instance(s) on 1 of 1 page(s) · <a href="https://dequeuniversity.com/rules/axe/4.14/page-has-heading-one?application=axeAPI">rule reference</a> · WCAG 1.3.1</p>
+  <p><strong>Who this affects:</strong> Screen reader users can't jump to the main content title.</p>
+  <details open><summary>Where we found it</summary><ul class="ex"><li><code>html</code><br><span class="snip">&lt;html data-uw-w-loader=&quot;&quot;&gt;</span><br><small>http://localhost:8767/bad.html</small></li></ul></details>
+  <p><strong>How to fix:</strong> Mark the product name, collection title or page title as the single <code>h1</code>.</p>
+  <pre><code>&lt;h1 class=&quot;product__title&quot;&gt;{{ product.title }}&lt;/h1&gt;</code></pre>
+</section>
+<section class="rule moderate">
+  <h3><span class="badge">moderate</span> 13. No &quot;Skip to content&quot; link</h3>
+  <p class="meta">1 instance(s) on 1 of 1 page(s) · WCAG 2.4.1</p>
+  <p><strong>Who this affects:</strong> Keyboard users must tab through the whole header and menu on every page.</p>
+  
+  <p><strong>How to fix:</strong> Add a skip link as the first element in <code>&lt;body&gt;</code>. It can stay hidden until it receives focus.</p>
+  <pre><code>&lt;a class=&quot;skip-link&quot; href=&quot;#MainContent&quot;&gt;Skip to content&lt;/a&gt;
+
+.skip-link{position:absolute;left:-999px}.skip-link:focus{left:8px;top:8px;z-index:999;background:#fff;padding:8px 12px}</code></pre>
+</section>
+<section class="rule moderate">
+  <h3><span class="badge">moderate</span> 14. An accessibility overlay widget is installed</h3>
+  <p class="meta">1 instance(s) on 1 of 1 page(s) · WCAG n/a</p>
+  <p><strong>Who this affects:</strong> Disabled users often find overlays get in the way. In 2025 the US FTC fined the largest overlay vendor $1M for claiming its widget made sites compliant.</p>
+  
+  <p><strong>How to fix:</strong> An overlay doesn't repair the underlying code, which is what this report addresses. Many accessibility advocates recommend removing it once the code fixes are in, and it costs $490–$3,990 a year that you could stop paying.</p>
+  
+</section>
+<h2>Manual review</h2>
+<div id="manual" class="note"><strong>Example manual finding:</strong> The cart icon link has no name, so a screen reader announces only "link". In <code>sections/header.liquid</code>, add <code>aria-label="Cart, {{ cart.item_count }} items"</code> to the cart link and <code>aria-hidden="true"</code> to the SVG inside it.</div>
+<h2>About this report</h2>
+<p class="note">This report combines automated testing (axe-core rules, keyboard traversal, 320px reflow, overlay detection) with a manual review of the pages listed. Automated tools find roughly a third to a half of accessibility problems, which is why the manual section matters. This is a technical assessment, not legal advice, and no audit can guarantee that a business will not receive a legal claim. Fixing the issues above meaningfully reduces barriers for disabled customers and is the strongest good-faith step a business can take.</p>
+</main></body></html>

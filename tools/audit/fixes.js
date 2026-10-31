@@ -1,0 +1,66 @@
+/* Plain-English explanations + paste-ready fixes for the most common failures. */
+'use strict';
+module.exports = {
+  'color-contrast': {
+    title: 'Text is too low-contrast to read', wcag: '1.4.3',
+    who: 'People with low vision, older customers, and anyone using a phone in sunlight.',
+    how: 'Body text needs a contrast ratio of at least 4.5:1 against its background, and large text (24px, or 18.7px bold) needs 3:1. Darken the text or lighten the background. Light-grey text on white and white text on pastel buttons are the usual offenders.',
+    code: '/* e.g. in your theme CSS */\n.price--compare, .caption, .footer a { color: #595959; } /* 7:1 on white */\n.button--primary { background: #1a5d38; color: #fff; }  /* 7.3:1 */',
+  },
+  'image-alt': {
+    title: 'Images have no text alternative', wcag: '1.1.1',
+    who: 'Blind customers using screen readers hear "image" or a file name instead of what the product looks like.',
+    how: 'Give every meaningful image alt text that says what it shows ("Navy linen shirt, front view"). Give purely decorative images an empty <code>alt=""</code>. In Shopify, set this under Products → Media → "Add alt text".',
+    code: '<img src="shirt.jpg" alt="Navy linen shirt, front view">\n<img src="divider.svg" alt="">  <!-- decorative -->',
+  },
+  'link-name': {
+    title: 'Links with no readable name', wcag: '2.4.4 / 4.1.2',
+    who: 'Screen reader users hear "link" with no idea where it goes. Icon-only social and cart links are the common cause.',
+    how: 'Add visible text or an <code>aria-label</code> to icon-only links.',
+    code: '<a href="/cart" aria-label="Cart, 2 items">\n  <svg aria-hidden="true" focusable="false">…</svg>\n</a>',
+  },
+  'button-name': {
+    title: 'Buttons with no readable name', wcag: '4.1.2',
+    who: 'Screen reader users hear "button" with no idea what it does (menu toggles, close icons, quantity +/−).',
+    how: 'Give icon-only buttons an <code>aria-label</code> and hide the decorative icon.',
+    code: '<button type="button" aria-label="Open menu" aria-expanded="false">\n  <svg aria-hidden="true" focusable="false">…</svg>\n</button>',
+  },
+  'label': {
+    title: 'Form fields with no label', wcag: '1.3.1 / 3.3.2',
+    who: 'Screen reader and voice-control users can\'t tell what to type into a field (newsletter, search, quantity).',
+    how: 'Connect a <code>&lt;label&gt;</code> to each field. Placeholder text is not a label. You can hide the label visually if the design needs it.',
+    code: '<label for="email" class="visually-hidden">Email address</label>\n<input id="email" type="email" autocomplete="email" placeholder="Email">\n\n.visually-hidden{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}',
+  },
+  'select-name': {
+    title: 'Dropdowns with no label', wcag: '4.1.2', who: 'Screen reader users can\'t tell what a dropdown (size, sort, country) controls.',
+    how: 'Associate a <code>&lt;label&gt;</code> with each <code>&lt;select&gt;</code>.', code: '<label for="sort">Sort by</label>\n<select id="sort">…</select>',
+  },
+  'html-has-lang': {
+    title: 'Page language is not declared', wcag: '3.1.1', who: 'Screen readers may pronounce the whole page in the wrong accent or language.',
+    how: 'Set the language on the <code>&lt;html&gt;</code> element (in Shopify: layout/theme.liquid).', code: '<html lang="{{ request.locale.iso_code }}">',
+  },
+  'heading-order': {
+    title: 'Heading levels skip around', wcag: '1.3.1', who: 'Screen reader users navigate by headings. Skipped levels make the page structure confusing.',
+    how: 'Use one <code>h1</code> per page, then <code>h2</code> for sections and <code>h3</code> inside them, without skipping levels. Choose the level for structure and use CSS for size.', code: '<h2 class="h4">Free shipping over $50</h2>  <!-- right level, styled small -->',
+  },
+  'page-has-heading-one': { title: 'No main (h1) heading on the page', wcag: '1.3.1', who: 'Screen reader users can\'t jump to the main content title.', how: 'Mark the product name, collection title or page title as the single <code>h1</code>.', code: '<h1 class="product__title">{{ product.title }}</h1>' },
+  'region': { title: 'Content outside page landmarks', wcag: '1.3.1 (best practice)', who: 'Screen reader users jump between header, main and footer. Content outside them is easy to miss.', how: 'Wrap the page in <code>&lt;header&gt;</code>, <code>&lt;main id="MainContent"&gt;</code> and <code>&lt;footer&gt;</code>, including announcement bars and popups.', code: '<header>…</header>\n<main id="MainContent">…</main>\n<footer>…</footer>' },
+  'landmark-one-main': { title: 'No <main> landmark', wcag: '1.3.1 (best practice)', who: 'Screen reader users cannot jump straight to the main content.', how: 'Wrap the primary content in a single <code>&lt;main&gt;</code>.', code: '<main id="MainContent" tabindex="-1">…</main>' },
+  'aria-hidden-focus': { title: 'Hidden content can still receive keyboard focus', wcag: '4.1.2', who: 'Keyboard and screen reader users tab into things they cannot see or hear (closed drawers, carousel slides).', how: 'When hiding a panel with <code>aria-hidden="true"</code>, also make its links and buttons unfocusable, using <code>inert</code> or <code>tabindex="-1"</code>.', code: '<div class="drawer" inert>…</div>  <!-- remove inert when opened -->' },
+  'nested-interactive': { title: 'Interactive controls nested inside each other', wcag: '4.1.2', who: 'Screen readers announce these unpredictably, and keyboard users may be unable to reach the inner control.', how: 'Don\'t put buttons or links inside other links or buttons. Restructure so they are siblings.', code: '' },
+  'link-in-text-block': { title: 'Links in text are only distinguished by color', wcag: '1.4.1', who: 'Color-blind customers can\'t see which words are links.', how: 'Underline links inside paragraphs.', code: '.rte a, main p a { text-decoration: underline; text-underline-offset: 2px; }' },
+  'meta-viewport': { title: 'Pinch-zoom is disabled', wcag: '1.4.4', who: 'Low-vision customers on phones cannot zoom in to read.', how: 'Remove <code>maximum-scale</code> and <code>user-scalable=no</code> from the viewport tag.', code: '<meta name="viewport" content="width=device-width, initial-scale=1">' },
+  'duplicate-id-aria': { title: 'Duplicate IDs break labels', wcag: '4.1.2', who: 'Screen readers read the wrong label for a field.', how: 'Make every <code>id</code> referenced by a label or ARIA attribute unique (often caused by repeated product-card snippets).', code: '' },
+  'list': { title: 'Lists are marked up incorrectly', wcag: '1.3.1', who: 'Screen readers announce the wrong item counts.', how: '<code>&lt;ul&gt;</code>/<code>&lt;ol&gt;</code> may only directly contain <code>&lt;li&gt;</code>.', code: '' },
+  'listitem': { title: '<li> used outside a list', wcag: '1.3.1', who: 'Screen readers lose list context.', how: 'Wrap <code>&lt;li&gt;</code> elements in a <code>&lt;ul&gt;</code> or <code>&lt;ol&gt;</code>.', code: '' },
+  'frame-title': { title: 'Embedded frames have no title', wcag: '4.1.2', who: 'Screen reader users can\'t tell what an embedded video, map or chat widget is.', how: 'Add a <code>title</code> to each iframe.', code: '<iframe src="…" title="Store location map"></iframe>' },
+  'svg-img-alt': { title: 'Meaningful SVG images have no text alternative', wcag: '1.1.1', who: 'Screen reader users miss logos and icons that carry meaning.', how: 'Give the SVG <code>role="img"</code> and an <code>aria-label</code>, or hide it if it is decorative.', code: '<svg role="img" aria-label="Acme Coffee logo">…</svg>' },
+  'pw-focus-visible': { title: 'Keyboard focus is invisible', wcag: '2.4.7', who: 'Keyboard-only users (motor disabilities, power users) can\'t see where they are on the page.', how: 'Don\'t remove focus outlines. Add a clear <code>:focus-visible</code> style site-wide.', code: ':focus-visible { outline: 3px solid #1849a9; outline-offset: 2px; }\n/* remove any rule like  *:focus { outline: none; }  */' },
+  'pw-focus-hidden': { title: 'Focus moves to invisible elements', wcag: '2.4.7 / 2.4.11', who: 'Keyboard users press Tab and focus disappears into closed menus, drawers or off-screen slides.', how: 'Make hidden menus, drawers and inactive slides unfocusable until they are shown (<code>inert</code>, <code>hidden</code> or <code>display:none</code>).', code: '<nav id="mobile-menu" hidden>…</nav>\n<!-- toggle: menu.hidden = !menu.hidden -->' },
+  'pw-skip-link': { title: 'No "Skip to content" link', wcag: '2.4.1', who: 'Keyboard users must tab through the whole header and menu on every page.', how: 'Add a skip link as the first element in <code>&lt;body&gt;</code>. It can stay hidden until it receives focus.', code: '<a class="skip-link" href="#MainContent">Skip to content</a>\n\n.skip-link{position:absolute;left:-999px}.skip-link:focus{left:8px;top:8px;z-index:999;background:#fff;padding:8px 12px}' },
+  'pw-reflow': { title: 'Page scrolls sideways when zoomed', wcag: '1.4.10', who: 'Low-vision customers who zoom to 400% have to scroll in two directions to read each line.', how: 'Find the element wider than the screen (often fixed-width tables, images or carousels) and make it fluid.', code: 'img, video, table { max-width: 100%; height: auto; }\n.some-wide-thing { min-width: 0; overflow-wrap: anywhere; }' },
+  'pw-overlay': { title: 'An accessibility overlay widget is installed', wcag: 'n/a',
+    who: 'Disabled users often find overlays get in the way. In 2025 the US FTC fined the largest overlay vendor $1M for claiming its widget made sites compliant.',
+    how: 'An overlay doesn\'t repair the underlying code, which is what this report addresses. Many accessibility advocates recommend removing it once the code fixes are in, and it costs $490–$3,990 a year that you could stop paying.', code: '' },
+  _default: (r) => ({ title: r.help, how: 'See the rule reference link above for remediation details. We include specific guidance for your theme in the manual review.', code: '' }),
+};
