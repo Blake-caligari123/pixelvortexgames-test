@@ -1,0 +1,3 @@
+node_modules/
+# Paid product files: never commit while the repo is public
+products/

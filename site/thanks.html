@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Thank you — The Screen-Free Family Reset</title><meta name="robots" content="noindex">
+<style>
+@font-face{font-family:Fredoka;font-weight:700;src:url(assets/fonts/fredoka-latin-700-normal.woff2) format('woff2')}
+:root{--bg:#FFF8EE;--fg:#23305A;--muted:#56607f;--card:#fff}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#171a26;--fg:#f3efe7;--muted:#b9bdd0;--card:#212536}}
+:root[data-theme="dark"]{--bg:#171a26;--fg:#f3efe7;--muted:#b9bdd0;--card:#212536}
+body{margin:0;background:var(--bg);color:var(--fg);font:17px/1.6 ui-sans-serif,system-ui,sans-serif}
+main{width:min(640px,calc(100% - 32px));margin:60px auto}h1{font-family:Fredoka,sans-serif;font-size:2.4rem;line-height:1.1}
+ol{background:var(--card);border-radius:16px;padding:20px 20px 20px 40px}li{margin:8px 0}p{color:var(--muted)}
+</style></head><body><main>
+<h1>Thank you! Your kit is on its way.</h1>
+<p>Your download link is on the order confirmation screen and in your email. (Check spam if you don't see it within a few minutes.)</p>
+<ol><li>Read the 4-page parent guide (about 10 minutes).</li><li>Print the agreement, rules poster, calendar, charts and cards.</li><li>Hold your family meeting and sign the agreement together. Day 1 starts now!</li></ol>
+<p>Questions or problems with your download? Just reply to your order email.</p>
+</main>
+<script>
+const PIXEL_ID = ''; // same Meta Pixel ID as index.html
+if (PIXEL_ID) {
+  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', PIXEL_ID); fbq('track', 'PageView');
+  const v = Number(new URLSearchParams(location.search).get('v')) || 24;
+  try { if (!sessionStorage.getItem('purchased')) { fbq('track', 'Purchase', { value: v, currency: 'USD' }); sessionStorage.setItem('purchased', '1'); } }
+  catch (e) { fbq('track', 'Purchase', { value: v, currency: 'USD' }); }
+}
+</script></body></html>
